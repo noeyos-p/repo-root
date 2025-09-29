@@ -1,0 +1,71 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: local
+    # 현재 활성화 된 것
+    group:
+      local:
+        # 배포
+        - common
+      prod:
+        # 개발
+        - common
+
+---
+spring:
+  config:
+    activate:
+      on-profile: common
+      # 현재 구조만 나열되어 있음
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+      # 기본 디폴트가 로컬이다
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/myapp?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    # 로컬에서 사용하는 유저와 개발에서 사용하는 유저는 다름
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update   # 최초 개발 단계에만 update 권장 → 생성 후 validate로 변경
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+app:
+  allowed-origins: ${ALLOWED_ORIGINS:http://localhost:3000}
+  # 나중에 도커 이미지로 바꾸거나 AWS에 있는 RDS에 사용할 경로변수
+  # 나중에 배포할 때 RDS에 이 값을 넣어서 배포함
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${RDS_ENDPOINT:my-prod-database}:3306/myapp?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    # EC2에 있는 MySQL 주소, my-prod-database를 도커 이미지로 사용
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: validate # 운영은 validate 고정
+      # RDS에 미리 세팅되어야 할 데이터들은 쿼리로 미리 만들어둬야함
+    properties:
+      hibernate:
+        show_sql: false
+
+app:
+  allowed-origins: ${ALLOWED_ORIGINS:https://YOUR_DOMAIN}
+  # 환경번수 파일 만들어서 직접 제공을 함
