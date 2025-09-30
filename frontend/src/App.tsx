@@ -34,6 +34,10 @@ export default function App() {
 
   return (
     <Container className="py-4">
+      <div className="p-6">
+        <h1>My App</h1>
+        <p className="mt-2">CI/CD OK 🚀</p>
+      </div>
       <Row className="mb-3">
         <Col><h3>사용자 관리</h3></Col>
       </Row>
@@ -41,13 +45,13 @@ export default function App() {
       <Row className="g-2 align-items-end mb-4">
         <Col md={4}>
           <Form.Label>이름</Form.Label>
-          <Form.Control value={name} onChange={e => setName(e.target.value)} 
-		          placeholder="홍길동" />
+          <Form.Control value={name} onChange={e => setName(e.target.value)}
+            placeholder="홍길동" />
         </Col>
         <Col md={4}>
           <Form.Label>도시</Form.Label>
-          <Form.Control value={city} onChange={e => setCity(e.target.value)} 
-		          placeholder="Seoul" />
+          <Form.Control value={city} onChange={e => setCity(e.target.value)}
+            placeholder="Seoul" />
         </Col>
         <Col md={4}>
           <Button onClick={add}>추가</Button>
@@ -60,10 +64,10 @@ export default function App() {
             <Table striped hover>
               <thead>
                 <tr>
-	                <th>ID</th>
-		              <th>이름</th>
-		              <th>도시</th>
-	                <th style={{width:120}}>액션</th>
+                  <th>ID</th>
+                  <th>이름</th>
+                  <th>도시</th>
+                  <th style={{ width: 120 }}>액션</th>
                 </tr>
               </thead>
               <tbody>
@@ -72,8 +76,8 @@ export default function App() {
                     <td>{u.id}</td>
                     <td>{u.name}</td>
                     <td>{u.city}</td>
-                    <td><Button variant="outline-danger" size="sm" 
-		                    onClick={() => remove(u.id)}>삭제</Button></td>
+                    <td><Button variant="outline-danger" size="sm"
+                      onClick={() => remove(u.id)}>삭제</Button></td>
                   </tr>
                 ))}
               </tbody>
